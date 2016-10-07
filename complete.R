@@ -15,7 +15,7 @@ complete <- function(directory, id=1:332)
     fileNameWithSlash <- paste("/",fileName,sep="")
     filePath = paste(directory,fileNameWithSlash,sep="")
     pollutantdata = read.csv(filePath)
-    print(filePath)
+    
     subpollutantdata <- pollutantdata[c(2,3)]
     good <- complete.cases(subpollutantdata)
     completes<-subpollutantdata[good,]
