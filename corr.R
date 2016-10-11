@@ -1,13 +1,12 @@
 corr <- function(directory, threshold=0)
 {
-  numberOfCompleteCases <- complete(directory)
-  numberOfCompleteCasesOverThreshold <- numberOfCompleteCases[numberOfCompleteCases$nobs>threshold,]
+  rowIndex = 1
+  completeCaseCount <- 0
+  id <- 1:332
+  corResults <- vector(mode="numeric",length=0)
+  dataTable <- 0
   
-  id <- numberOfCompleteCasesOverThreshold[1]
-  corVar <- 0
-  i <- 1
-  rowCount <- nrow(id)
-  while(i<=332)
+  for(i in id)
   {
     fileName = ""
     if (i > 99)
@@ -21,12 +20,24 @@ corr <- function(directory, threshold=0)
     pollutantdata = read.csv(filePath)
     
     subpollutantdata <- pollutantdata[c(2,3)]
-    good <- sum(complete.cases(subpollutantdata))
+    threshholdCount <- sum(complete.cases(subpollutantdata))
+    #completes<-subpollutantdata[good,]
     
-    print(good)
-    
-    i <- i+1
+    if (threshholdCount > threshold) 
+    {
+      good <- complete.cases(subpollutantdata)
+      dataTable<-subpollutantdata[good,]
+      
+      if (completeCaseCount == 0)
+        corResults <- as.numeric(cor(dataTable[1],dataTable[2]))
+      else
+        corResults <- c(corResults,as.numeric(cor(dataTable[1],dataTable[2])))
+      
+      #print(cor(dataTable[1],dataTable[2]))
+      
+      completeCaseCount <- completeCaseCount + 1
+    }
   }
   
-  corVar
+  corResults
 }
